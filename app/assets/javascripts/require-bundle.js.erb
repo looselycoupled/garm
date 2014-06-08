@@ -1,0 +1,57 @@
+//= require vendor/polyfills
+//= require vendor/require
+//= require vendor/jquery.colorbox
+//= require vendor/underscore
+//= require vendor/backbone
+//= require vendor/jquery
+//= require vendor/bootstrap
+//= require vendor/bootstrap.editable
+//= require vendor/store
+//= require jquery_ujs
+
+
+// creates a helper object used to centrally configure/provide useful
+// URLs for the JS application
+define('data', {
+
+  apiUrl: 'https://congress.api.sunlightfoundation.com',
+
+  apiKey: '<%= ENV['SUNLIGHT_API_KEY'] %>',
+
+  assetPath: '<%= asset_path "" %>',
+
+  api: function() {
+    var args = Array.prototype.slice.call(arguments);
+    return [this.apiUrl].concat(args).join('/') + '?apikey=' + this.apiKey;
+  }
+});
+
+// requirejs configuration
+requirejs.config({
+
+  paths: {
+    'backbone': '../vendor/backbone',
+    'jquery': '../vendor/jquery',
+    'jquery.colorbox': '../vendor/jquery.colorbox',
+    'store': '../vendor/store',
+    'text': '../vendor/require-text',
+    'underscore': '../vendor/underscore',
+  },
+
+  <% if Rails.env.development? %>
+  // if in local development, then always use the latest code
+  baseUrl: '/assets/src/',
+  urlArgs: "cache=" + (new Date()).getTime(),
+
+  <% elsif Rails.env.qa? || Rails.env.prototype?%>
+  // if in QA, then always use the latest code
+  baseUrl: '/assets/src/',
+  urlArgs: "cache=<%= Time.now.to_i %>",
+
+  <% else %>
+  // if in Production, use the grunt builds
+  baseUrl: '/assets/build/',
+  urlArgs: "cache=1.0.0",
+  <% end %>
+
+});

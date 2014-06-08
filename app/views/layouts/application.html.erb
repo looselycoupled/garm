@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Garm</title>
+  <%= render 'shared/meta' %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+</head>
+<body>
+
+  <%= render 'shared/nav' %>
+
+  <div class="container">
+  <%= yield %>
+  </div>
+
+  <%= render 'shared/footer' %>
+
+  <%= javascript_include_tag "require-bundle" %>
+  <script>require(['app/setup']);</script>
+
+</body>
+</html>
